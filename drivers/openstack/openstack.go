@@ -164,11 +164,11 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Usage:  "OpenStack keypair to use to SSH to the instance",
 			Value:  "",
 		},
-		mcnflag.StringFlag{
+		mcnflag.StringSliceFlag{
 			EnvVar: "OS_NETWORK_ID",
 			Name:   "openstack-net-id",
 			Usage:  "OpenStack comma seperated network id(s) the machine will be connected on",
-			Value:  "",
+			Value:  []string{},
 		},
 		mcnflag.StringFlag{
 			EnvVar: "OS_PRIVATE_KEY_FILE",
@@ -182,11 +182,11 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Usage:  "File containing an openstack userdata script",
 			Value:  "",
 		},
-		mcnflag.StringFlag{
+		mcnflag.StringSliceFlag{
 			EnvVar: "OS_NETWORK_NAME",
 			Name:   "openstack-net-name",
 			Usage:  "OpenStack comma seperated network name(s) the machine will be connected on",
-			Value:  "",
+			Value:  []string{},
 		},
 		mcnflag.StringFlag{
 			EnvVar: "OS_SECURITY_GROUPS",
@@ -291,12 +291,8 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.FlavorName = flags.String("openstack-flavor-name")
 	d.ImageId = flags.String("openstack-image-id")
 	d.ImageName = flags.String("openstack-image-name")
-	if flags.String("openstack-net-id") != "" {
-		d.NetworkIds = strings.Split(flags.String("openstack-net-id"), ",")
-	}
-	if flags.String("openstack-net-name") != "" {
-		d.NetworkNames = strings.Split(flags.String("openstack-net-name"), ",")
-	}
+	d.NetworkIds = flags.StringSlice("openstack-net-id")
+	d.NetworkNames = flags.StringSlice("openstack-net-name")
 	d.metadata = flags.String("openstack-metadata")
 	if flags.String("openstack-sec-groups") != "" {
 		d.SecurityGroups = strings.Split(flags.String("openstack-sec-groups"), ",")
